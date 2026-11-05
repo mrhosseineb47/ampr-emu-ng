@@ -1,3 +1,4 @@
+
 name: Build AMPR Runtime 0.3.0
 
 on:
@@ -15,7 +16,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: v0.3.0
+          ref: main
           fetch-depth: 0
 
       - name: Build and verify PS5 runtime
