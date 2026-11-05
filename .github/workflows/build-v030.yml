@@ -1,0 +1,37 @@
+name: Build AMPR Runtime 0.3.0
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: v0.3.0
+          fetch-depth: 0
+
+      - name: Build and verify PS5 runtime
+        run: |
+          chmod +x ps5/build-docker.sh
+          ./ps5/build-docker.sh verify
+
+      - name: Check runtime
+        run: |
+          test -s out/release/libSceAmpr.sprx
+          file out/release/libSceAmpr.sprx
+          sha256sum out/release/libSceAmpr.sprx
+
+      - name: Upload runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: libSceAmpr-v0.3.0
+          path: out/release/libSceAmpr.sprx
+          retention-days: 7
